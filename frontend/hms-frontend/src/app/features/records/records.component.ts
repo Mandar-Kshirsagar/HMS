@@ -1,59 +1,90 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { MaterialModule } from '../../shared/material/material.module';
 import { RecordsService, MedicalRecord } from '../../core/services/records.service';
 import { DocumentsService, DocumentItem } from '../../core/services/documents.service';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule, MaterialModule],
   template: `
-  <div class="card">
+  <mat-card>
     <div class="card-header"><div class="title">EMR & Documents</div></div>
     <div class="toolbar">
-      <input class="input" placeholder="Patient Id" [(ngModel)]="patientId"/>
-      <button class="btn" (click)="load()">Load</button>
+      <mat-form-field appearance="outline">
+        <mat-label>Patient ID</mat-label>
+        <input matInput placeholder="Patient Id" [(ngModel)]="patientId"/>
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="load()">Load</button>
     </div>
     <div class="grid cols-2" *ngIf="patientId">
       <div>
         <div class="title" style="margin-bottom:8px;">Records</div>
         <div class="toolbar">
-          <input class="input" placeholder="Diagnosis" [(ngModel)]="newRecord.diagnosis"/>
-          <input class="input" placeholder="Prescription" [(ngModel)]="newRecord.prescription"/>
+          <mat-form-field appearance="outline">
+            <mat-label>Diagnosis</mat-label>
+            <input matInput placeholder="Diagnosis" [(ngModel)]="newRecord.diagnosis"/>
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Prescription</mat-label>
+            <input matInput placeholder="Prescription" [(ngModel)]="newRecord.prescription"/>
+          </mat-form-field>
         </div>
         <div class="toolbar">
-          <input class="input" placeholder="Treatment" [(ngModel)]="newRecord.treatmentPlan"/>
-          <button class="btn btn-primary" (click)="addRecord()">Add</button>
+          <mat-form-field appearance="outline">
+            <mat-label>Treatment</mat-label>
+            <input matInput placeholder="Treatment" [(ngModel)]="newRecord.treatmentPlan"/>
+          </mat-form-field>
+          <button mat-raised-button color="primary" (click)="addRecord()">Add</button>
         </div>
-        <table>
-          <thead><tr><th>Date</th><th>Diagnosis</th><th>Prescription</th></tr></thead>
-          <tbody>
-            <tr *ngFor="let r of records">
-              <td>{{r.visitDate | date:'short'}}</td>
-              <td>{{r.diagnosis}}</td>
-              <td>{{r.prescription}}</td>
-            </tr>
-          </tbody>
+        <table mat-table [dataSource]="records" class="mat-elevation-z1">
+          <ng-container matColumnDef="visitDate">
+            <th mat-header-cell *matHeaderCellDef>Date</th>
+            <td mat-cell *matCellDef="let r">{{r.visitDate | date:'short'}}</td>
+          </ng-container>
+          <ng-container matColumnDef="diagnosis">
+            <th mat-header-cell *matHeaderCellDef>Diagnosis</th>
+            <td mat-cell *matCellDef="let r">{{r.diagnosis}}</td>
+          </ng-container>
+          <ng-container matColumnDef="prescription">
+            <th mat-header-cell *matHeaderCellDef>Prescription</th>
+            <td mat-cell *matCellDef="let r">{{r.prescription}}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="recordsDisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: recordsDisplayedColumns;"></tr>
         </table>
       </div>
       <div>
         <div class="title" style="margin-bottom:8px;">Documents</div>
         <div class="toolbar">
           <input type="file" (change)="onFile($event)"/>
-          <button class="btn" [disabled]="!file" (click)="upload()">Upload</button>
+          <button mat-raised-button [disabled]="!file" (click)="upload()">Upload</button>
         </div>
-        <table>
-          <thead><tr><th>Name</th><th>Type</th><th>When</th><th></th></tr></thead>
-          <tbody>
-            <tr *ngFor="let d of docs">
-              <td>{{d.fileName}}</td><td>{{d.contentType}}</td><td>{{d.uploadedAt | date:'short'}}</td>
-              <td><a class="btn" [href]="d.filePath" target="_blank">Open</a></td>
-            </tr>
-          </tbody>
+        <table mat-table [dataSource]="docs" class="mat-elevation-z1">
+          <ng-container matColumnDef="fileName">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let d">{{d.fileName}}</td>
+          </ng-container>
+          <ng-container matColumnDef="contentType">
+            <th mat-header-cell *matHeaderCellDef>Type</th>
+            <td mat-cell *matCellDef="let d">{{d.contentType}}</td>
+          </ng-container>
+          <ng-container matColumnDef="uploadedAt">
+            <th mat-header-cell *matHeaderCellDef>When</th>
+            <td mat-cell *matCellDef="let d">{{d.uploadedAt | date:'short'}}</td>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef></th>
+            <td mat-cell *matCellDef="let d"><a mat-button [href]="d.filePath" target="_blank">Open</a></td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="docsDisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: docsDisplayedColumns;"></tr>
         </table>
       </div>
     </div>
-  </div>`
+  </mat-card>`
 })
 export class RecordsComponent {
   patientId = '';
@@ -61,6 +92,8 @@ export class RecordsComponent {
   docs: DocumentItem[] = [];
   file?: File;
   newRecord: Partial<MedicalRecord> = { diagnosis: '', prescription: '', treatmentPlan: '' };
+  recordsDisplayedColumns = ['visitDate', 'diagnosis', 'prescription'];
+  docsDisplayedColumns = ['fileName', 'contentType', 'uploadedAt', 'actions'];
   constructor(private rs: RecordsService, private ds: DocumentsService) {}
   load() {
     if (!this.patientId) return;

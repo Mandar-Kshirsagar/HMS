@@ -9,6 +9,7 @@ const routes: Routes = [
   { path: 'patients/:id/edit', canActivate: [AuthGuard], loadComponent: () => import('./features/patients/patient-form.component').then(m => m.PatientFormComponent) },
   { path: 'appointments', canActivate: [AuthGuard], loadComponent: () => import('./features/appointments/appointments.component').then(m => m.AppointmentsComponent) },
   { path: 'records', canActivate: [AuthGuard], loadComponent: () => import('./features/records/records.component').then(m => m.RecordsComponent) },
+  { path: 'staff', canActivate: [AuthGuard], loadComponent: () => import('./features/staff/staff.component').then(m => m.StaffComponent) },
   { path: 'dashboard', canActivate: [AuthGuard], loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent) },
   { path: '', pathMatch: 'full', redirectTo: 'dashboard' }
 ];

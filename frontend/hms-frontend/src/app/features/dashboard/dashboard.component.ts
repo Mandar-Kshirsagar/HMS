@@ -1,28 +1,30 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { MaterialModule } from '../../shared/material/material.module';
 import { DashboardService } from '../../core/services/dashboard.service';
 
 @Component({
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule, MaterialModule],
   template: `
-  <div class="card">
+  <mat-card>
     <div class="card-header"><div class="title">HMIS Dashboard</div></div>
     <div class="grid cols-2">
-      <div class="card">
+      <mat-card>
         <div class="title">Summary</div>
         <div class="toolbar">
           <div>Total Patients: {{summary?.totalPatients}}</div>
           <div>Doctors: {{summary?.totalDoctors}}</div>
           <div>Appointments Today: {{summary?.appointmentsToday}}</div>
         </div>
-      </div>
-      <div class="card">
+      </mat-card>
+      <mat-card>
         <div class="title">Visits by Month ({{year}})</div>
         <canvas #chart width="520" height="220"></canvas>
-      </div>
+      </mat-card>
     </div>
-  </div>`
+  </mat-card>`
 })
 export class DashboardComponent implements OnInit {
   @ViewChild('chart', { static: false }) chartRef?: ElementRef<HTMLCanvasElement>;

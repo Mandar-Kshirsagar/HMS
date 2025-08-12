@@ -1,39 +1,60 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { MaterialModule } from '../../shared/material/material.module';
 import { AppointmentsService, Appointment } from '../../core/services/appointments.service';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule, MaterialModule],
   template: `
-  <div class="card">
+  <mat-card>
     <div class="card-header">
       <div class="title">Appointments</div>
     </div>
     <div class="toolbar">
-      <input class="input" placeholder="Doctor User Id" [(ngModel)]="doctorId"/>
-      <input class="input" type="date" [(ngModel)]="dayStr"/>
-      <button class="btn" (click)="load()">Load Schedule</button>
+      <mat-form-field appearance="outline">
+        <mat-label>Doctor User ID</mat-label>
+        <input matInput placeholder="Doctor User Id" [(ngModel)]="doctorId"/>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Date</mat-label>
+        <input matInput type="date" [(ngModel)]="dayStr"/>
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="load()">Load Schedule</button>
     </div>
-    <table>
-      <thead><tr><th>Start</th><th>End</th><th>Status</th><th>Reason</th><th></th></tr></thead>
-      <tbody>
-        <tr *ngFor="let a of list">
-          <td>{{a.start | date:'short'}}</td>
-          <td>{{a.end | date:'short'}}</td>
-          <td>{{a.status}}</td>
-          <td>{{a.reason}}</td>
-          <td><button class="btn" (click)="cancel(a.id)">Cancel</button></td>
-        </tr>
-      </tbody>
+    <table mat-table [dataSource]="list" class="mat-elevation-z1">
+      <ng-container matColumnDef="start">
+        <th mat-header-cell *matHeaderCellDef>Start</th>
+        <td mat-cell *matCellDef="let a">{{a.start | date:'short'}}</td>
+      </ng-container>
+      <ng-container matColumnDef="end">
+        <th mat-header-cell *matHeaderCellDef>End</th>
+        <td mat-cell *matCellDef="let a">{{a.end | date:'short'}}</td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef>Status</th>
+        <td mat-cell *matCellDef="let a">{{a.status}}</td>
+      </ng-container>
+      <ng-container matColumnDef="reason">
+        <th mat-header-cell *matHeaderCellDef>Reason</th>
+        <td mat-cell *matCellDef="let a">{{a.reason}}</td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let a"><button mat-button color="warn" (click)="cancel(a.id)">Cancel</button></td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
-  </div>`
+  </mat-card>`
 })
 export class AppointmentsComponent implements OnInit {
   doctorId = '';
   dayStr = '';
   list: Appointment[] = [];
+  displayedColumns = ['start', 'end', 'status', 'reason', 'actions'];
   constructor(private svc: AppointmentsService) {}
   ngOnInit() {}
   load() {

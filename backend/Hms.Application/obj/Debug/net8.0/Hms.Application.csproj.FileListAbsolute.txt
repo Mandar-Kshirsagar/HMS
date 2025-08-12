@@ -13,3 +13,4 @@ C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Application\obj\Debug\net8.0\Hm
 C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Application\obj\Debug\net8.0\refint\Hms.Application.dll
 C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Application\obj\Debug\net8.0\Hms.Application.pdb
 C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Application\obj\Debug\net8.0\ref\Hms.Application.dll
+C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Application\obj\Debug\net8.0\Hms.Application.sourcelink.json

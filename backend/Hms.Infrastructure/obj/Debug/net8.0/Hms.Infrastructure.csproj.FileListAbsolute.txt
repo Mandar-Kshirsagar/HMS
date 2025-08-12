@@ -17,3 +17,4 @@ C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Infrastructure\obj\Debug\net8.0
 C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Infrastructure\obj\Debug\net8.0\ref\Hms.Infrastructure.dll
 C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Infrastructure\bin\Debug\net8.0\Hms.Infrastructure.runtimeconfig.json
 C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Infrastructure\obj\Debug\net8.0\Hms.Infrastructure.genruntimeconfig.cache
+C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Infrastructure\obj\Debug\net8.0\Hms.Infrastructure.sourcelink.json

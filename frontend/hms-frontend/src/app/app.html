@@ -1,18 +1,41 @@
-<nav class="topbar">
-  <div class="brand">HMS</div>
-  <a routerLink="/patients" routerLinkActive="active">Patients</a>
-  <a routerLink="/appointments" routerLinkActive="active">Appointments</a>
-  <a routerLink="/records" routerLinkActive="active">Records</a>
-  <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+<mat-toolbar color="primary">
+  <mat-icon>local_hospital</mat-icon>
+  <span class="brand">HMS</span>
+  <a mat-button routerLink="/patients" routerLinkActive="active">
+    <mat-icon>people</mat-icon>
+    Patients
+  </a>
+  <a mat-button routerLink="/appointments" routerLinkActive="active">
+    <mat-icon>event</mat-icon>
+    Appointments
+  </a>
+  <a mat-button routerLink="/records" routerLinkActive="active">
+    <mat-icon>folder</mat-icon>
+    Records
+  </a>
+  <a mat-button routerLink="/staff" routerLinkActive="active">
+    <mat-icon>group</mat-icon>
+    Staff
+  </a>
+  <a mat-button routerLink="/dashboard" routerLinkActive="active">
+    <mat-icon>dashboard</mat-icon>
+    Dashboard
+  </a>
   <span class="spacer"></span>
   <ng-container *ngIf="isAuthed(); else loginLink">
     <span class="user">{{ userName() }}</span>
-    <button class="btn" (click)="onLogout()">Logout</button>
+    <button mat-button (click)="onLogout()">
+      <mat-icon>logout</mat-icon>
+      Logout
+    </button>
   </ng-container>
   <ng-template #loginLink>
-    <a routerLink="/login" routerLinkActive="active">Login</a>
+    <a mat-button routerLink="/login" routerLinkActive="active">
+      <mat-icon>login</mat-icon>
+      Login
+    </a>
   </ng-template>
-</nav>
+</mat-toolbar>
 <main class="container">
   <router-outlet></router-outlet>
   

@@ -3,21 +3,28 @@ import { AuthService } from '../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { MaterialModule } from '../../shared/material/material.module';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, MaterialModule],
   template: `
-  <div class="card" style="max-width:420px;margin:64px auto;">
-    <div class="card-header"><div class="title">Sign in</div></div>
+  <mat-card style="max-width:420px;margin:64px auto;">
+    <h2>Sign in</h2>
     <form [formGroup]="form" (ngSubmit)="login()" class="grid">
-      <input class="input" placeholder="Username" formControlName="username">
-      <input class="input" type="password" placeholder="Password" formControlName="password">
+      <mat-form-field appearance="outline">
+        <mat-label>Username</mat-label>
+        <input matInput placeholder="Username" formControlName="username">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" placeholder="Password" formControlName="password">
+      </mat-form-field>
       <div class="hint" *ngIf="error">{{error}}</div>
-      <div class="form-actions"><button class="btn btn-primary" [disabled]="form.invalid || loading">{{ loading ? 'Signing in…' : 'Login' }}</button></div>
+      <div class="form-actions"><button mat-raised-button color="primary" [disabled]="form.invalid || loading">{{ loading ? 'Signing in…' : 'Login' }}</button></div>
     </form>
-  </div>`
+  </mat-card>`
 })
 export class LoginComponent {
   form: FormGroup;

@@ -9,3 +9,4 @@ C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Domain\obj\Debug\net8.0\Hms.Dom
 C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Domain\obj\Debug\net8.0\refint\Hms.Domain.dll
 C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Domain\obj\Debug\net8.0\Hms.Domain.pdb
 C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Domain\obj\Debug\net8.0\ref\Hms.Domain.dll
+C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Domain\obj\Debug\net8.0\Hms.Domain.sourcelink.json
