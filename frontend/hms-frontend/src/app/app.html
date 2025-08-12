@@ -1,12 +1,19 @@
 <nav class="topbar">
   <div class="brand">HMS</div>
-  <a routerLink="/patients">Patients</a>
-  <a routerLink="/appointments">Appointments</a>
-  <a routerLink="/dashboard">Dashboard</a>
+  <a routerLink="/patients" routerLinkActive="active">Patients</a>
+  <a routerLink="/appointments" routerLinkActive="active">Appointments</a>
+  <a routerLink="/records" routerLinkActive="active">Records</a>
+  <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
   <span class="spacer"></span>
-  <a routerLink="/login">Login</a>
+  <ng-container *ngIf="isAuthed(); else loginLink">
+    <span class="user">{{ userName() }}</span>
+    <button class="btn" (click)="onLogout()">Logout</button>
+  </ng-container>
+  <ng-template #loginLink>
+    <a routerLink="/login" routerLinkActive="active">Login</a>
+  </ng-template>
 </nav>
 <main class="container">
-  <router-outlet />
+  <router-outlet></router-outlet>
   
 </main>
