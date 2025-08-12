@@ -10,7 +10,7 @@ const routes: Routes = [
   { path: 'appointments', canActivate: [AuthGuard], loadComponent: () => import('./features/appointments/appointments.component').then(m => m.AppointmentsComponent) },
   { path: 'records', canActivate: [AuthGuard], loadComponent: () => import('./features/records/records.component').then(m => m.RecordsComponent) },
   { path: 'dashboard', canActivate: [AuthGuard], loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent) },
-  { path: '', pathMatch: 'full', redirectTo: 'login' }
+  { path: '', pathMatch: 'full', redirectTo: 'dashboard' }
 ];
 
 @NgModule({

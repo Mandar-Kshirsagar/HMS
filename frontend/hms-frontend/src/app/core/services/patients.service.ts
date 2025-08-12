@@ -11,6 +11,7 @@ export class PatientsService {
     let params = new HttpParams(); if (q) params = params.set('q', q);
     return this.http.get<Patient[]>(`${environment.apiUrl}/patients`, { params });
   }
+  get(id: string) { return this.http.get<Patient>(`${environment.apiUrl}/patients/${id}`); }
   create(p: Omit<Patient, 'id'>) { return this.http.post<Patient>(`${environment.apiUrl}/patients`, p); }
   update(id: string, p: Omit<Patient, 'id'>) { return this.http.put<void>(`${environment.apiUrl}/patients/${id}`, p); }
 }

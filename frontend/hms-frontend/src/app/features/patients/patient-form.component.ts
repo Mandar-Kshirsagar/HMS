@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators, FormGroup } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { PatientsService } from '../../core/services/patients.service';
@@ -30,7 +30,7 @@ import { ActivatedRoute, Router } from '@angular/router';
     </form>
   </div>`
 })
-export class PatientFormComponent {
+export class PatientFormComponent implements OnInit {
   id?: string;
   form: FormGroup;
   constructor(private fb: FormBuilder, private svc: PatientsService, private router: Router, route: ActivatedRoute) {
@@ -42,6 +42,19 @@ export class PatientFormComponent {
       contact: [''],
       address: ['']
     });
+  }
+  ngOnInit() {
+    if (this.id) {
+      this.svc.get(this.id).subscribe(p => {
+        this.form.patchValue({
+          fullName: p.fullName,
+          dateOfBirth: p.dateOfBirth.substring(0,10),
+          gender: p.gender,
+          contact: p.contact,
+          address: p.address
+        });
+      });
+    }
   }
   submit() {
     const v = { ...this.form.value } as any;
