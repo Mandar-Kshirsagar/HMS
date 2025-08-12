@@ -1,42 +1,101 @@
-<mat-toolbar color="primary">
-  <mat-icon>local_hospital</mat-icon>
-  <span class="brand">HMS</span>
-  <a mat-button routerLink="/patients" routerLinkActive="active">
-    <mat-icon>people</mat-icon>
-    Patients
-  </a>
-  <a mat-button routerLink="/appointments" routerLinkActive="active">
-    <mat-icon>event</mat-icon>
-    Appointments
-  </a>
-  <a mat-button routerLink="/records" routerLinkActive="active">
-    <mat-icon>folder</mat-icon>
-    Records
-  </a>
-  <a mat-button routerLink="/staff" routerLinkActive="active">
-    <mat-icon>group</mat-icon>
-    Staff
-  </a>
-  <a mat-button routerLink="/dashboard" routerLinkActive="active">
-    <mat-icon>dashboard</mat-icon>
-    Dashboard
-  </a>
-  <span class="spacer"></span>
-  <ng-container *ngIf="isAuthed(); else loginLink">
-    <span class="user">{{ userName() }}</span>
-    <button mat-button (click)="onLogout()">
-      <mat-icon>logout</mat-icon>
-      Logout
+<div class="app-container">
+  <!-- Top toolbar -->
+  <mat-toolbar color="primary" class="top-toolbar">
+    <button mat-icon-button (click)="toggleSidebar()" class="sidebar-toggle">
+      <mat-icon>menu</mat-icon>
     </button>
-  </ng-container>
-  <ng-template #loginLink>
-    <a mat-button routerLink="/login" routerLinkActive="active">
-      <mat-icon>login</mat-icon>
-      Login
-    </a>
-  </ng-template>
-</mat-toolbar>
-<main class="container">
-  <router-outlet></router-outlet>
-  
-</main>
+    <mat-icon class="brand-icon">local_hospital</mat-icon>
+    <span class="brand">Hospital Management System</span>
+    <span class="spacer"></span>
+    
+    <!-- User menu -->
+    <ng-container *ngIf="isAuthed(); else loginLink">
+      <div class="user-info">
+        <mat-icon class="user-avatar">account_circle</mat-icon>
+        <span class="user-name">{{ userName() }}</span>
+        <button mat-icon-button [matMenuTriggerFor]="userMenu">
+          <mat-icon>expand_more</mat-icon>
+        </button>
+        <mat-menu #userMenu="matMenu">
+          <button mat-menu-item>
+            <mat-icon>person</mat-icon>
+            <span>Profile</span>
+          </button>
+          <button mat-menu-item>
+            <mat-icon>settings</mat-icon>
+            <span>Settings</span>
+          </button>
+          <mat-divider></mat-divider>
+          <button mat-menu-item (click)="onLogout()">
+            <mat-icon>logout</mat-icon>
+            <span>Logout</span>
+          </button>
+        </mat-menu>
+      </div>
+    </ng-container>
+    <ng-template #loginLink>
+      <a mat-raised-button color="accent" routerLink="/login" routerLinkActive="active">
+        <mat-icon>login</mat-icon>
+        Login
+      </a>
+    </ng-template>
+  </mat-toolbar>
+
+  <!-- Main content area -->
+  <div class="main-content">
+    <!-- Sidebar -->
+    <mat-sidenav-container class="sidenav-container">
+      <mat-sidenav #sidenav mode="side" opened class="sidenav" [class.sidenav-closed]="!sidebarOpen">
+        <div class="sidebar-header">
+          <mat-icon>dashboard</mat-icon>
+          <span>Navigation</span>
+        </div>
+        
+        <mat-nav-list class="sidebar-nav">
+          <a mat-list-item routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+            <mat-icon matListItemIcon>dashboard</mat-icon>
+            <span matListItemTitle>Dashboard</span>
+          </a>
+          
+          <a mat-list-item routerLink="/patients" routerLinkActive="active" class="nav-item">
+            <mat-icon matListItemIcon>people</mat-icon>
+            <span matListItemTitle>Patients</span>
+            <span class="nav-badge" *ngIf="patientCount > 0">{{patientCount}}</span>
+          </a>
+          
+          <a mat-list-item routerLink="/appointments" routerLinkActive="active" class="nav-item">
+            <mat-icon matListItemIcon>event</mat-icon>
+            <span matListItemTitle>Appointments</span>
+            <span class="nav-badge urgent" *ngIf="appointmentCount > 0">{{appointmentCount}}</span>
+          </a>
+          
+          <a mat-list-item routerLink="/records" routerLinkActive="active" class="nav-item">
+            <mat-icon matListItemIcon>folder</mat-icon>
+            <span matListItemTitle>Medical Records</span>
+          </a>
+          
+          <a mat-list-item routerLink="/staff" routerLinkActive="active" class="nav-item">
+            <mat-icon matListItemIcon>group</mat-icon>
+            <span matListItemTitle>Staff</span>
+          </a>
+        </mat-nav-list>
+        
+        <div class="sidebar-footer">
+          <div class="quick-stats">
+            <div class="stat-item">
+              <mat-icon>trending_up</mat-icon>
+              <span>System Status: Online</span>
+            </div>
+          </div>
+        </div>
+      </mat-sidenav>
+      
+      <!-- Main content -->
+      <mat-sidenav-content class="sidenav-content">
+        <div class="content-wrapper">
+          <router-outlet></router-outlet>
+        </div>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  </div>
+</div>
