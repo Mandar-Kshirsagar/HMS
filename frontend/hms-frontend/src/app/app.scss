@@ -1,82 +1,242 @@
-// App-specific styles that complement Material Design
-.spacer {
-  flex: 1 1 auto;
-}
-
-.brand {
-  font-weight: 600;
-  font-size: 1.2rem;
-  margin-right: 16px;
-}
-
-.user {
-  margin-right: 16px;
-  color: white;
-  font-weight: 500;
-}
-
-// Custom card header styling
-.card-header {
+// Modern HMS Application Styles
+.app-container {
+  height: 100vh;
   display: flex;
-  align-items: center;
-  margin-bottom: 16px;
+  flex-direction: column;
+}
+
+// Top toolbar styling
+.top-toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   
-  .title {
-    font-size: 1.5rem;
-    font-weight: 500;
-    color: #333;
+  .sidebar-toggle {
+    margin-right: 16px;
   }
-}
-
-// Custom toolbar styling
-.toolbar {
-  display: flex;
-  gap: 16px;
-  align-items: center;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
-}
-
-// Grid system
-.grid {
-  display: grid;
-  gap: 16px;
   
-  &.cols-2 {
-    grid-template-columns: 1fr 1fr;
+  .brand-icon {
+    margin-right: 12px;
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+  
+  .brand {
+    font-weight: 600;
+    font-size: 1.3rem;
+    letter-spacing: 0.5px;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     
-    @media (max-width: 768px) {
-      grid-template-columns: 1fr;
+    .user-avatar {
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+    
+    .user-name {
+      font-weight: 500;
+      margin-right: 4px;
     }
   }
 }
 
-.col-span-2 {
-  grid-column: span 2;
+// Main content area
+.main-content {
+  flex: 1;
+  margin-top: 64px; // Height of toolbar
+  height: calc(100vh - 64px);
+}
+
+// Sidenav container
+.sidenav-container {
+  height: 100%;
   
-  @media (max-width: 768px) {
-    grid-column: span 1;
+  .sidenav {
+    width: 280px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.1);
+    
+    &.sidenav-closed {
+      width: 70px;
+      
+      .sidebar-header span,
+      .nav-item span,
+      .sidebar-footer {
+        display: none;
+      }
+      
+      .nav-item {
+        justify-content: center;
+        
+        mat-icon {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+  
+  .sidenav-content {
+    background: #f8fafc;
   }
 }
 
-// Form actions
-.form-actions {
-  display: flex;
-  gap: 16px;
-  margin-top: 16px;
+// Sidebar styling
+.sidebar-header {
+  padding: 24px 20px 20px;
+  color: white;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 16px;
+  
+  mat-icon {
+    margin-right: 12px;
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+  
+  span {
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
 }
 
-// Hint text
-.hint {
-  color: #666;
-  font-size: 0.875rem;
-  margin-top: 8px;
+.sidebar-nav {
+  padding: 0 16px;
+  
+  .nav-item {
+    margin: 4px 0;
+    border-radius: 12px;
+    color: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s ease;
+    position: relative;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      transform: translateX(4px);
+    }
+    
+    &.active {
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    mat-icon {
+      margin-right: 16px;
+      color: rgba(255, 255, 255, 0.8);
+    }
+    
+    span {
+      font-weight: 500;
+    }
+    
+    .nav-badge {
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #10b981;
+      color: white;
+      border-radius: 12px;
+      padding: 2px 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      min-width: 20px;
+      text-align: center;
+      
+      &.urgent {
+        background: #ef4444;
+        animation: pulse 2s infinite;
+      }
+    }
+  }
 }
 
-// Container
-.container {
+.sidebar-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
   padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  
+  .quick-stats {
+    .stat-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 0.875rem;
+      
+      mat-icon {
+        font-size: 16px;
+        width: 16px;
+        height: 16px;
+        color: #10b981;
+      }
+    }
+  }
+}
+
+// Content wrapper
+.content-wrapper {
+  padding: 24px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .sidenav {
+    width: 100% !important;
+    
+    &.sidenav-closed {
+      width: 0 !important;
+    }
+  }
+  
+  .content-wrapper {
+    padding: 16px;
+  }
+  
+  .brand {
+    display: none;
+  }
+}
+
+// Animations
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+// Utility classes
+.spacer {
+  flex: 1 1 auto;
+}
+
+// Material overrides
+.mat-mdc-list-item {
+  height: 56px;
+}
+
+.mat-mdc-menu-panel {
+  min-width: 200px;
 }
 
