@@ -84,17 +84,6 @@ import { AppointmentsService, Appointment } from '../../core/services/appointmen
               <input matInput type="date" [(ngModel)]="dayStr" (change)="load()"/>
             </mat-form-field>
             
-            <mat-form-field appearance="outline" class="doctor-field">
-              <mat-label>Doctor</mat-label>
-              <mat-select [(ngModel)]="doctorId" (selectionChange)="load()">
-                <mat-option value="">All Doctors</mat-option>
-                <mat-option value="1">Dr. Smith - Cardiology</mat-option>
-                <mat-option value="2">Dr. Johnson - Orthopedics</mat-option>
-                <mat-option value="3">Dr. Williams - Neurology</mat-option>
-                <mat-option value="4">Dr. Brown - Pediatrics</mat-option>
-              </mat-select>
-            </mat-form-field>
-            
             <button mat-stroked-button (click)="load()" class="search-btn">
               <mat-icon>search</mat-icon>
               Search
@@ -177,44 +166,19 @@ import { AppointmentsService, Appointment } from '../../core/services/appointmen
             <!-- Patient Column -->
             <ng-container matColumnDef="patient">
               <th mat-header-cell *matHeaderCellDef>Patient</th>
-              <td mat-cell *matCellDef="let a">
-                <div class="patient-info">
-                  <div class="patient-avatar">
-                    <mat-icon>person</mat-icon>
-                  </div>
-                  <div class="patient-details">
-                    <div class="patient-name">{{getPatientName(a)}}</div>
-                    <div class="patient-id">ID: {{a.patientId}}</div>
-                  </div>
-                </div>
-              </td>
+              <td mat-cell *matCellDef="let a">{{a.patientId}}</td>
             </ng-container>
 
             <!-- Doctor Column -->
             <ng-container matColumnDef="doctor">
               <th mat-header-cell *matHeaderCellDef>Doctor</th>
-              <td mat-cell *matCellDef="let a">
-                <div class="doctor-info">
-                  <div class="doctor-avatar">
-                    <mat-icon>medical_services</mat-icon>
-                  </div>
-                  <div class="doctor-details">
-                    <div class="doctor-name">{{getDoctorName(a)}}</div>
-                    <div class="doctor-specialty">{{getDoctorSpecialty(a)}}</div>
-                  </div>
-                </div>
-              </td>
+              <td mat-cell *matCellDef="let a">{{a.doctorUserId}}</td>
             </ng-container>
 
             <!-- Reason Column -->
             <ng-container matColumnDef="reason">
               <th mat-header-cell *matHeaderCellDef>Reason</th>
-              <td mat-cell *matCellDef="let a">
-                <div class="reason-info">
-                  <div class="reason-text">{{a.reason || 'General Checkup'}}</div>
-                  <div class="appointment-type">{{getAppointmentType(a)}}</div>
-                </div>
-              </td>
+              <td mat-cell *matCellDef="let a">{{a.reason}}</td>
             </ng-container>
 
             <!-- Status Column -->
@@ -538,53 +502,6 @@ import { AppointmentsService, Appointment } from '../../core/services/appointmen
       }
     }
 
-    .patient-info, .doctor-info {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .patient-avatar, .doctor-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      
-      &.patient-avatar { background: linear-gradient(135deg, #667eea, #764ba2); }
-      &.doctor-avatar { background: linear-gradient(135deg, #10b981, #059669); }
-      
-      mat-icon {
-        color: white;
-        font-size: 20px;
-        width: 20px;
-        height: 20px;
-      }
-    }
-
-    .patient-details .patient-name, .doctor-details .doctor-name {
-      font-weight: 500;
-      color: #1f2937;
-    }
-
-    .patient-details .patient-id, .doctor-details .doctor-specialty {
-      font-size: 0.875rem;
-      color: #6b7280;
-      margin-top: 2px;
-    }
-
-    .reason-info .reason-text {
-      font-weight: 500;
-      color: #1f2937;
-    }
-
-    .reason-info .appointment-type {
-      font-size: 0.875rem;
-      color: #6b7280;
-      margin-top: 2px;
-    }
-
     .status-badge {
       padding: 6px 12px;
       border-radius: 20px;
@@ -740,55 +657,29 @@ export class AppointmentsComponent implements OnInit {
   
   ngOnInit() {
     this.dayStr = new Date().toISOString().split('T')[0];
+    // Set a default doctor ID or fetch from user context
+    this.doctorId = 'admin'; // This should come from the authenticated user context
     this.load();
   }
   
   load() {
     if (!this.doctorId) {
-      // Load all appointments for the selected date
-      this.loadMockAppointments();
+      console.warn('No doctor ID available for loading appointments');
       return;
     }
     
     const d = this.dayStr ? new Date(this.dayStr) : undefined;
-    this.svc.doctorSchedule(this.doctorId, d).subscribe(r => {
-      this.list = r;
-      this.applyFilters();
-    });
-  }
-  
-  loadMockAppointments() {
-    // Mock data for demonstration
-    this.list = [
-      {
-        id: 1,
-        start: new Date(new Date().setHours(9, 0, 0, 0)).toISOString(),
-        end: new Date(new Date().setHours(9, 30, 0, 0)).toISOString(),
-        status: 'scheduled',
-        reason: 'Annual Checkup',
-        patientId: '1',
-        doctorUserId: '1'
+    this.svc.doctorSchedule(this.doctorId, d).subscribe({
+      next: r => {
+        this.list = r;
+        this.applyFilters();
       },
-      {
-        id: 2,
-        start: new Date(new Date().setHours(10, 0, 0, 0)).toISOString(),
-        end: new Date(new Date().setHours(10, 45, 0, 0)).toISOString(),
-        status: 'confirmed',
-        reason: 'Follow-up Consultation',
-        patientId: '2',
-        doctorUserId: '2'
-      },
-      {
-        id: 3,
-        start: new Date(new Date().setHours(14, 0, 0, 0)).toISOString(),
-        end: new Date(new Date().setHours(15, 0, 0, 0)).toISOString(),
-        status: 'scheduled',
-        reason: 'Emergency Consultation',
-        patientId: '3',
-        doctorUserId: '1'
+      error: err => {
+        console.warn('Failed to load appointments:', err);
+        this.list = [];
+        this.applyFilters();
       }
-    ];
-    this.applyFilters();
+    });
   }
   
   applySearch() {
@@ -800,7 +691,7 @@ export class AppointmentsComponent implements OnInit {
     
     if (this.searchQuery) {
       filtered = filtered.filter(a => 
-        this.getPatientName(a).toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        a.patientId.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
         (a.reason && a.reason.toLowerCase().includes(this.searchQuery.toLowerCase()))
       );
     }
@@ -861,34 +752,10 @@ export class AppointmentsComponent implements OnInit {
     });
   }
   
-  getDuration(start: string, end: string): string {
+  getDuration(start: Date, end: Date): string {
     const diffMs = new Date(end).getTime() - new Date(start).getTime();
     const diffMins = Math.round(diffMs / 60000);
     return `${diffMins} min`;
-  }
-  
-  getPatientName(appointment: Appointment): string {
-    // Mock patient names - in real app this would come from patient service
-    const names = ['John Doe', 'Jane Smith', 'Mike Johnson', 'Sarah Wilson'];
-    return names[parseInt(appointment.patientId) % names.length];
-  }
-  
-  getDoctorName(appointment: Appointment): string {
-    // Mock doctor names
-    const names = ['Dr. Smith', 'Dr. Johnson', 'Dr. Williams', 'Dr. Brown'];
-    return names[parseInt(appointment.doctorUserId) % names.length];
-  }
-  
-  getDoctorSpecialty(appointment: Appointment): string {
-    // Mock specialties
-    const specialties = ['Cardiology', 'Orthopedics', 'Neurology', 'Pediatrics'];
-    return specialties[parseInt(appointment.doctorUserId) % specialties.length];
-  }
-  
-  getAppointmentType(appointment: Appointment): string {
-    // Mock appointment types
-    const types = ['Regular', 'Follow-up', 'Emergency', 'Consultation'];
-    return types[appointment.id % types.length];
   }
   
   getStatusClass(status: string): string {
@@ -924,7 +791,7 @@ export class AppointmentsComponent implements OnInit {
     const appointment = this.filteredAppointments.find(a => new Date(a.start).getHours() === hour);
     if (appointment) {
       return {
-        patientName: this.getPatientName(appointment),
+        patientName: appointment.patientId,
         reason: appointment.reason
       };
     }

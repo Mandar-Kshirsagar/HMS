@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../../shared/material/material.module';
 import { RecordsService, MedicalRecord } from '../../core/services/records.service';
 import { DocumentsService, DocumentItem } from '../../core/services/documents.service';
+import { PatientsService, Patient } from '../../core/services/patients.service';
 
 @Component({
   standalone: true,
@@ -43,13 +44,13 @@ import { DocumentsService, DocumentItem } from '../../core/services/documents.se
             </button>
           </div>
           
-          <div class="patient-info" *ngIf="patientId && patientInfo">
+          <div class="patient-info" *ngIf="patient">
             <div class="patient-avatar">
               <mat-icon>person</mat-icon>
             </div>
             <div class="patient-details">
-              <div class="patient-name">{{patientInfo.name}}</div>
-              <div class="patient-meta">ID: {{patientId}} | Age: {{patientInfo.age}} | {{patientInfo.gender}}</div>
+              <div class="patient-name">{{patient.fullName}}</div>
+              <div class="patient-meta">ID: {{patient.id}} | Age: {{calculateAge(patient.dateOfBirth)}} | {{patient.gender}}</div>
             </div>
           </div>
         </div>
@@ -146,45 +147,25 @@ import { DocumentsService, DocumentItem } from '../../core/services/documents.se
                 <!-- Date Column -->
                 <ng-container matColumnDef="visitDate">
                   <th mat-header-cell *matHeaderCellDef>Visit Date</th>
-                  <td mat-cell *matCellDef="let r">
-                    <div class="date-info">
-                      <div class="visit-date">{{r.visitDate | date:'shortDate'}}</div>
-                      <div class="visit-time">{{r.visitDate | date:'shortTime'}}</div>
-                    </div>
-                  </td>
+                  <td mat-cell *matCellDef="let r">{{r.visitDate | date:'short'}}</td>
                 </ng-container>
 
                 <!-- Diagnosis Column -->
                 <ng-container matColumnDef="diagnosis">
                   <th mat-header-cell *matHeaderCellDef>Diagnosis</th>
-                  <td mat-cell *matCellDef="let r">
-                    <div class="diagnosis-info">
-                      <div class="diagnosis-text">{{r.diagnosis}}</div>
-                      <div class="diagnosis-category">{{getDiagnosisCategory(r.diagnosis)}}</div>
-                    </div>
-                  </td>
+                  <td mat-cell *matCellDef="let r">{{r.diagnosis}}</td>
                 </ng-container>
 
                 <!-- Prescription Column -->
                 <ng-container matColumnDef="prescription">
                   <th mat-header-cell *matHeaderCellDef>Prescription</th>
-                  <td mat-cell *matCellDef="let r">
-                    <div class="prescription-info">
-                      <div class="prescription-text">{{r.prescription}}</div>
-                      <div class="prescription-status">{{getPrescriptionStatus(r)}}</div>
-                    </div>
-                  </td>
+                  <td mat-cell *matCellDef="let r">{{r.prescription}}</td>
                 </ng-container>
 
                 <!-- Treatment Column -->
                 <ng-container matColumnDef="treatment">
                   <th mat-header-cell *matHeaderCellDef>Treatment</th>
-                  <td mat-cell *matCellDef="let r">
-                    <div class="treatment-info">
-                      <div class="treatment-text">{{r.treatmentPlan}}</div>
-                      <div class="treatment-progress">{{getTreatmentProgress(r)}}</div>
-                    </div>
-                  </td>
+                  <td mat-cell *matCellDef="let r">{{r.treatmentPlan}}</td>
                 </ng-container>
 
                 <!-- Actions Column -->
@@ -289,7 +270,7 @@ import { DocumentsService, DocumentItem } from '../../core/services/documents.se
                       </div>
                       <div class="file-details">
                         <div class="file-name">{{d.fileName}}</div>
-                        <div class="file-meta">{{d.contentType}} • {{getFileSize(d)}}</div>
+                        <div class="file-meta">{{d.contentType}}</div>
                       </div>
                     </div>
                   </td>
@@ -298,12 +279,7 @@ import { DocumentsService, DocumentItem } from '../../core/services/documents.se
                 <!-- Upload Date Column -->
                 <ng-container matColumnDef="uploadedAt">
                   <th mat-header-cell *matHeaderCellDef>Uploaded</th>
-                  <td mat-cell *matCellDef="let d">
-                    <div class="upload-info">
-                      <div class="upload-date">{{d.uploadedAt | date:'shortDate'}}</div>
-                      <div class="upload-time">{{d.uploadedAt | date:'shortTime'}}</div>
-                    </div>
-                  </td>
+                  <td mat-cell *matCellDef="let d">{{d.uploadedAt | date:'short'}}</td>
                 </ng-container>
 
                 <!-- Actions Column -->
@@ -585,80 +561,6 @@ import { DocumentsService, DocumentItem } from '../../core/services/documents.se
       }
     }
 
-    .record-row {
-      transition: background-color 0.2s ease;
-      
-      &:hover {
-        background-color: #f8fafc;
-      }
-      
-      &.recent {
-        background-color: #f0fdf4;
-        border-left: 4px solid #10b981;
-      }
-      
-      &.urgent {
-        background-color: #fef2f2;
-        border-left: 4px solid #ef4444;
-      }
-    }
-
-    .date-info .visit-date {
-      font-weight: 500;
-      color: #1f2937;
-    }
-
-    .date-info .visit-time {
-      font-size: 0.875rem;
-      color: #6b7280;
-      margin-top: 2px;
-    }
-
-    .diagnosis-info .diagnosis-text {
-      font-weight: 500;
-      color: #1f2937;
-    }
-
-    .diagnosis-info .diagnosis-category {
-      font-size: 0.75rem;
-      color: #667eea;
-      background: #dbeafe;
-      padding: 2px 8px;
-      border-radius: 12px;
-      display: inline-block;
-      margin-top: 4px;
-    }
-
-    .prescription-info .prescription-text {
-      font-weight: 500;
-      color: #1f2937;
-    }
-
-    .prescription-info .prescription-status {
-      font-size: 0.75rem;
-      color: #10b981;
-      background: #dcfce7;
-      padding: 2px 8px;
-      border-radius: 12px;
-      display: inline-block;
-      margin-top: 4px;
-    }
-
-    .treatment-info .treatment-text {
-      font-weight: 500;
-      color: #1f2937;
-    }
-
-    .treatment-info .treatment-progress {
-      font-size: 0.75rem;
-      color: #f59e0b;
-      background: #fef3c7;
-      padding: 2px 8px;
-      border-radius: 12px;
-      display: inline-block;
-      margin-top: 4px;
-    }
-
     .upload-section {
       padding: 0 24px 24px;
       border-bottom: 1px solid #e5e7eb;
@@ -781,17 +683,6 @@ import { DocumentsService, DocumentItem } from '../../core/services/documents.se
       margin-top: 2px;
     }
 
-    .upload-info .upload-date {
-      font-weight: 500;
-      color: #1f2937;
-    }
-
-    .upload-info .upload-time {
-      font-size: 0.875rem;
-      color: #6b7280;
-      margin-top: 2px;
-    }
-
     .action-buttons {
       display: flex;
       justify-content: center;
@@ -900,6 +791,7 @@ import { DocumentsService, DocumentItem } from '../../core/services/documents.se
 })
 export class RecordsComponent implements OnInit {
   patientId = '';
+  patient: Patient | null = null;
   records: MedicalRecord[] = [];
   docs: DocumentItem[] = [];
   selectedFiles: File[] = [];
@@ -914,28 +806,34 @@ export class RecordsComponent implements OnInit {
   recordsDisplayedColumns = ['visitDate', 'diagnosis', 'prescription', 'treatment', 'actions'];
   docsDisplayedColumns = ['fileInfo', 'uploadedAt', 'actions'];
   
-  // Mock patient info
-  patientInfo: any = null;
-  
-  constructor(private rs: RecordsService, private ds: DocumentsService) {}
+  constructor(private rs: RecordsService, private ds: DocumentsService, private ps: PatientsService) {}
   
   ngOnInit() {}
   
   searchPatient() {
     if (this.patientId) {
-      // Mock patient info - in real app this would come from patient service
-      this.patientInfo = {
-        name: 'John Doe',
-        age: 35,
-        gender: 'Male'
-      };
+      this.ps.get(this.patientId).subscribe(p => this.patient = p);
     }
   }
   
   load() {
     if (!this.patientId) return;
-    this.rs.list(this.patientId).subscribe(r => this.records = r);
-    this.ds.list(this.patientId).subscribe(d => this.docs = d);
+    
+    this.rs.list(this.patientId).subscribe({
+      next: r => this.records = r,
+      error: err => {
+        console.warn('Failed to load medical records:', err);
+        this.records = [];
+      }
+    });
+    
+    this.ds.list(this.patientId).subscribe({
+      next: d => this.docs = d,
+      error: err => {
+        console.warn('Failed to load documents:', err);
+        this.docs = [];
+      }
+    });
   }
   
   isFormValid(): boolean {
@@ -973,24 +871,6 @@ export class RecordsComponent implements OnInit {
                                    r.diagnosis?.toLowerCase().includes('ongoing')).length;
   }
   
-  getDiagnosisCategory(diagnosis: string): string {
-    if (diagnosis?.toLowerCase().includes('cardiac')) return 'Cardiology';
-    if (diagnosis?.toLowerCase().includes('bone') || diagnosis?.toLowerCase().includes('joint')) return 'Orthopedics';
-    if (diagnosis?.toLowerCase().includes('brain') || diagnosis?.toLowerCase().includes('nerve')) return 'Neurology';
-    if (diagnosis?.toLowerCase().includes('child')) return 'Pediatrics';
-    return 'General';
-  }
-  
-  getPrescriptionStatus(record: MedicalRecord): string {
-    // Mock status logic
-    return 'Active';
-  }
-  
-  getTreatmentProgress(record: MedicalRecord): string {
-    // Mock progress logic
-    return 'In Progress';
-  }
-  
   isRecentRecord(record: MedicalRecord): boolean {
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
@@ -1002,6 +882,19 @@ export class RecordsComponent implements OnInit {
            record.diagnosis?.toLowerCase().includes('urgent') || false;
   }
   
+  calculateAge(dateOfBirth: Date): number {
+    const today = new Date();
+    const birthDate = new Date(dateOfBirth);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+    
+    return age;
+  }
+
   // File handling methods
   triggerFileInput() {
     const fileInput = document.querySelector('input[type="file"]') as HTMLInputElement;
@@ -1021,12 +914,11 @@ export class RecordsComponent implements OnInit {
     if (this.selectedFiles.length === 0) return;
     
     this.uploading = true;
-    // Mock upload - in real app this would call the service
-    setTimeout(() => {
+    this.ds.upload(this.patientId, this.selectedFiles[0]).subscribe(() => {
       this.selectedFiles = [];
       this.uploading = false;
       this.load();
-    }, 2000);
+    });
   }
   
   getFileTypeClass(contentType: string): string {
@@ -1041,11 +933,6 @@ export class RecordsComponent implements OnInit {
     if (contentType.includes('word') || contentType.includes('document')) return 'description';
     if (contentType.includes('image')) return 'image';
     return 'insert_drive_file';
-  }
-  
-  getFileSize(doc: DocumentItem): string {
-    // Mock file size - in real app this would come from the document data
-    return '2.5 MB';
   }
   
   // Action methods

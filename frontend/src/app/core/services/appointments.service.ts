@@ -2,7 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
-export interface Appointment { id:number; patientId:string; doctorUserId:string; start:string; end:string; status:string; reason?:string; }
+export interface Appointment { 
+  id:number; 
+  patientId:string; 
+  doctorUserId:string; 
+  start:Date; 
+  end:Date; 
+  status:string; 
+  reason?:string; 
+}
 
 @Injectable({ providedIn: 'root' })
 export class AppointmentsService {

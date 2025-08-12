@@ -22,6 +22,7 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
         // Patient entity configuration
         builder.Entity<Patient>(entity =>
         {
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
             entity.HasIndex(p => p.FullName);
             entity.HasMany(p => p.MedicalRecords)
                   .WithOne()

@@ -2,7 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 
-export interface MedicalRecord { id:number; patientId:string; doctorUserId:string; visitDate:string; diagnosis:string; prescription:string; treatmentPlan:string; notes?:string; }
+export interface MedicalRecord { 
+  id:number; 
+  patientId:string; 
+  doctorUserId:string; 
+  visitDate:Date; 
+  diagnosis:string; 
+  prescription:string; 
+  treatmentPlan:string; 
+  notes?:string; 
+}
 
 @Injectable({ providedIn: 'root' })
 export class RecordsService {

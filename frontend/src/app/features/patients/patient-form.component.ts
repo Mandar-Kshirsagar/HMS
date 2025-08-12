@@ -65,7 +65,7 @@ export class PatientFormComponent implements OnInit {
       this.svc.get(this.id).subscribe(p => {
         this.form.patchValue({
           fullName: p.fullName,
-          dateOfBirth: p.dateOfBirth.substring(0,10),
+          dateOfBirth: new Date(p.dateOfBirth).toISOString().substring(0,10),
           gender: p.gender,
           contact: p.contact,
           address: p.address

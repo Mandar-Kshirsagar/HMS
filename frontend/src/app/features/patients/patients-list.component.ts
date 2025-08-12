@@ -42,80 +42,8 @@ import { PatientsService, Patient } from '../../core/services/patients.service';
               Search
             </button>
           </div>
-          
-          <div class="filters-section">
-            <mat-form-field appearance="outline" class="filter-field">
-              <mat-label>Department</mat-label>
-              <mat-select [(ngModel)]="selectedDepartment" (selectionChange)="applyFilters()">
-                <mat-option value="">All Departments</mat-option>
-                <mat-option value="cardiology">Cardiology</mat-option>
-                <mat-option value="orthopedics">Orthopedics</mat-option>
-                <mat-option value="neurology">Neurology</mat-option>
-                <mat-option value="pediatrics">Pediatrics</mat-option>
-                <mat-option value="emergency">Emergency</mat-option>
-              </mat-select>
-            </mat-form-field>
-            
-            <mat-form-field appearance="outline" class="filter-field">
-              <mat-label>Status</mat-label>
-              <mat-select [(ngModel)]="selectedStatus" (selectionChange)="applyFilters()">
-                <mat-option value="">All Status</mat-option>
-                <mat-option value="active">Active</mat-option>
-                <mat-option value="inactive">Inactive</mat-option>
-                <mat-option value="discharged">Discharged</mat-option>
-              </mat-select>
-            </mat-form-field>
-            
-            <button mat-stroked-button (click)="clearFilters()" class="clear-btn">
-              <mat-icon>clear</mat-icon>
-              Clear
-            </button>
-          </div>
         </div>
       </mat-card>
-
-      <!-- Statistics Summary -->
-      <div class="stats-summary">
-        <div class="stat-item">
-          <div class="stat-icon total">
-            <mat-icon>people</mat-icon>
-          </div>
-          <div class="stat-info">
-            <div class="stat-number">{{patients.length}}</div>
-            <div class="stat-label">Total Patients</div>
-          </div>
-        </div>
-        
-        <div class="stat-item">
-          <div class="stat-icon active">
-            <mat-icon>check_circle</mat-icon>
-          </div>
-          <div class="stat-info">
-            <div class="stat-number">{{getActivePatients()}}</div>
-            <div class="stat-label">Active Patients</div>
-          </div>
-        </div>
-        
-        <div class="stat-item">
-          <div class="stat-icon new">
-            <mat-icon>person_add</mat-icon>
-          </div>
-          <div class="stat-info">
-            <div class="stat-number">{{getNewPatientsThisMonth()}}</div>
-            <div class="stat-label">New This Month</div>
-          </div>
-        </div>
-        
-        <div class="stat-item">
-          <div class="stat-icon urgent">
-            <mat-icon>priority_high</mat-icon>
-          </div>
-          <div class="stat-info">
-            <div class="stat-number">{{getUrgentPatients()}}</div>
-            <div class="stat-label">Urgent Cases</div>
-          </div>
-        </div>
-      </div>
 
       <!-- Patients Table -->
       <mat-card class="table-card">
@@ -138,12 +66,7 @@ import { PatientsService, Patient } from '../../core/services/patients.service';
             <!-- Patient ID Column -->
             <ng-container matColumnDef="patientId">
               <th mat-header-cell *matHeaderCellDef>Patient ID</th>
-              <td mat-cell *matCellDef="let p">
-                <div class="patient-id">
-                  <span class="id-number">#{{p.id}}</span>
-                  <span class="id-badge" [class]="getPatientStatusClass(p)">{{getPatientStatus(p)}}</span>
-                </div>
-              </td>
+              <td mat-cell *matCellDef="let p">{{p.id}}</td>
             </ng-container>
 
             <!-- Avatar & Name Column -->
@@ -165,12 +88,7 @@ import { PatientsService, Patient } from '../../core/services/patients.service';
             <!-- Contact Column -->
             <ng-container matColumnDef="contact">
               <th mat-header-cell *matHeaderCellDef>Contact</th>
-              <td mat-cell *matCellDef="let p">
-                <div class="contact-info">
-                  <div class="phone">{{p.phone || 'No phone'}}</div>
-                  <div class="address">{{p.address || 'No address'}}</div>
-                </div>
-              </td>
+              <td mat-cell *matCellDef="let p">{{p.contact}}</td>
             </ng-container>
 
             <!-- DOB & Age Column -->
@@ -180,27 +98,6 @@ import { PatientsService, Patient } from '../../core/services/patients.service';
                 <div class="age-info">
                   <div class="dob">{{p.dateOfBirth | date}}</div>
                   <div class="age">{{calculateAge(p.dateOfBirth)}} years</div>
-                </div>
-              </td>
-            </ng-container>
-
-            <!-- Department Column -->
-            <ng-container matColumnDef="department">
-              <th mat-header-cell *matHeaderCellDef>Department</th>
-              <td mat-cell *matCellDef="let p">
-                <span class="department-badge" [class]="getDepartmentClass(p)">
-                  {{getDepartment(p) || 'General'}}
-                </span>
-              </td>
-            </ng-container>
-
-            <!-- Last Visit Column -->
-            <ng-container matColumnDef="lastVisit">
-              <th mat-header-cell *matHeaderCellDef>Last Visit</th>
-              <td mat-cell *matCellDef="let p">
-                <div class="visit-info">
-                  <div class="visit-date">{{getLastVisit(p) | date}}</div>
-                  <div class="visit-status">{{getVisitStatus(p)}}</div>
                 </div>
               </td>
             </ng-container>
@@ -333,78 +230,6 @@ import { PatientsService, Patient } from '../../core/services/patients.service';
       padding: 0 24px;
     }
 
-    .filters-section {
-      display: flex;
-      gap: 16px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .filter-field {
-      min-width: 160px;
-    }
-
-    .clear-btn {
-      height: 56px;
-      padding: 0 20px;
-    }
-
-    .stats-summary {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 20px;
-      margin-bottom: 24px;
-    }
-
-    .stat-item {
-      background: white;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      transition: transform 0.3s ease;
-      
-      &:hover {
-        transform: translateY(-4px);
-      }
-    }
-
-    .stat-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      
-      &.total { background: linear-gradient(135deg, #667eea, #764ba2); }
-      &.active { background: linear-gradient(135deg, #10b981, #059669); }
-      &.new { background: linear-gradient(135deg, #f59e0b, #d97706); }
-      &.urgent { background: linear-gradient(135deg, #ef4444, #dc2626); }
-      
-      mat-icon {
-        color: white;
-        font-size: 24px;
-        width: 24px;
-        height: 24px;
-      }
-    }
-
-    .stat-info .stat-number {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #1f2937;
-      line-height: 1;
-    }
-
-    .stat-info .stat-label {
-      color: #6b7280;
-      font-size: 0.875rem;
-      margin-top: 4px;
-    }
-
     .table-card {
       border-radius: 16px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -458,30 +283,6 @@ import { PatientsService, Patient } from '../../core/services/patients.service';
       }
     }
 
-    .patient-id {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      
-      .id-number {
-        font-weight: 600;
-        color: #1f2937;
-      }
-      
-      .id-badge {
-        padding: 2px 8px;
-        border-radius: 12px;
-        font-size: 0.75rem;
-        font-weight: 500;
-        text-align: center;
-        width: fit-content;
-        
-        &.active { background: #dcfce7; color: #16a34a; }
-        &.inactive { background: #f3f4f6; color: #6b7280; }
-        &.discharged { background: #fee2e2; color: #dc2626; }
-      }
-    }
-
     .patient-info {
       display: flex;
       align-items: center;
@@ -516,53 +317,12 @@ import { PatientsService, Patient } from '../../core/services/patients.service';
       margin-top: 2px;
     }
 
-    .contact-info .phone {
-      font-weight: 500;
-      color: #1f2937;
-    }
-
-    .contact-info .address {
-      font-size: 0.875rem;
-      color: #6b7280;
-      margin-top: 2px;
-      max-width: 200px;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
     .age-info .dob {
       font-weight: 500;
       color: #1f2937;
     }
 
     .age-info .age {
-      font-size: 0.875rem;
-      color: #6b7280;
-      margin-top: 2px;
-    }
-
-    .department-badge {
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 0.75rem;
-      font-weight: 500;
-      text-align: center;
-      
-      &.cardiology { background: #dbeafe; color: #2563eb; }
-      &.orthopedics { background: #f3e8ff; color: #9333ea; }
-      &.neurology { background: #dcfce7; color: #16a34a; }
-      &.pediatrics { background: #fef3c7; color: #d97706; }
-      &.emergency { background: #fee2e2; color: #dc2626; }
-      &.general { background: #f3f4f6; color: #6b7280; }
-    }
-
-    .visit-info .visit-date {
-      font-weight: 500;
-      color: #1f2937;
-    }
-
-    .visit-info .visit-status {
       font-size: 0.875rem;
       color: #6b7280;
       margin-top: 2px;
@@ -615,25 +375,16 @@ import { PatientsService, Patient } from '../../core/services/patients.service';
         gap: 20px;
         text-align: center;
       }
-      
-      .stats-summary {
-        grid-template-columns: repeat(2, 1fr);
-      }
     }
 
     @media (max-width: 768px) {
-      .search-section,
-      .filters-section {
+      .search-section {
         flex-direction: column;
         align-items: stretch;
       }
       
       .search-field {
         max-width: none;
-      }
-      
-      .stats-summary {
-        grid-template-columns: 1fr;
       }
       
       .table-header {
@@ -647,9 +398,7 @@ import { PatientsService, Patient } from '../../core/services/patients.service';
 export class PatientsListComponent implements OnInit {
   patients: Patient[] = [];
   q = '';
-  selectedDepartment = '';
-  selectedStatus = '';
-  displayedColumns = ['patientId', 'avatarName', 'contact', 'dobAge', 'department', 'lastVisit', 'actions'];
+  displayedColumns = ['patientId', 'avatarName', 'contact', 'dobAge', 'actions'];
   totalPatients = 0;
   pageSize = 25;
   
@@ -666,68 +415,7 @@ export class PatientsListComponent implements OnInit {
     }); 
   }
   
-  applyFilters() {
-    // Apply department and status filters
-    this.load();
-  }
-  
-  clearFilters() {
-    this.selectedDepartment = '';
-    this.selectedStatus = '';
-    this.applyFilters();
-  }
-  
-  getActivePatients(): number {
-    return this.patients.filter(p => this.getPatientStatus(p) === 'Active').length;
-  }
-  
-  getNewPatientsThisMonth(): number {
-    const now = new Date();
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-    return this.patients.filter(p => new Date(p.dateOfBirth) >= startOfMonth).length;
-  }
-  
-  getUrgentPatients(): number {
-    return this.patients.filter(p => this.getPatientStatus(p) === 'Urgent').length;
-  }
-  
-  getPatientStatus(patient: Patient): string {
-    // Mock status logic - in real app this would come from patient data
-    const statuses = ['Active', 'Inactive', 'Discharged', 'Urgent'];
-    return statuses[parseInt(patient.id) % statuses.length];
-  }
-  
-  getPatientStatusClass(patient: Patient): string {
-    const status = this.getPatientStatus(patient);
-    return status.toLowerCase();
-  }
-  
-  getDepartment(patient: Patient): string {
-    // Mock department logic
-    const departments = ['Cardiology', 'Orthopedics', 'Neurology', 'Pediatrics', 'Emergency'];
-    return departments[parseInt(patient.id) % departments.length];
-  }
-  
-  getDepartmentClass(patient: Patient): string {
-    const dept = this.getDepartment(patient);
-    return dept.toLowerCase();
-  }
-  
-  getLastVisit(patient: Patient): Date {
-    // Mock last visit - in real app this would come from patient data
-    const daysAgo = (parseInt(patient.id) % 30) + 1;
-    const date = new Date();
-    date.setDate(date.getDate() - daysAgo);
-    return date;
-  }
-  
-  getVisitStatus(patient: Patient): string {
-    // Mock visit status
-    const statuses = ['Completed', 'Scheduled', 'Cancelled', 'No Show'];
-    return statuses[parseInt(patient.id) % statuses.length];
-  }
-  
-  calculateAge(dateOfBirth: string): number {
+  calculateAge(dateOfBirth: Date): number {
     const today = new Date();
     const birthDate = new Date(dateOfBirth);
     let age = today.getFullYear() - birthDate.getFullYear();
