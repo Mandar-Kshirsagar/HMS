@@ -1,0 +1,11 @@
+C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Domain\bin\Debug\net8.0\Hms.Domain.deps.json
+C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Domain\bin\Debug\net8.0\Hms.Domain.dll
+C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Domain\bin\Debug\net8.0\Hms.Domain.pdb
+C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Domain\obj\Debug\net8.0\Hms.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Domain\obj\Debug\net8.0\Hms.Domain.AssemblyInfoInputs.cache
+C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Domain\obj\Debug\net8.0\Hms.Domain.AssemblyInfo.cs
+C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Domain\obj\Debug\net8.0\Hms.Domain.csproj.CoreCompileInputs.cache
+C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Domain\obj\Debug\net8.0\Hms.Domain.dll
+C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Domain\obj\Debug\net8.0\refint\Hms.Domain.dll
+C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Domain\obj\Debug\net8.0\Hms.Domain.pdb
+C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Domain\obj\Debug\net8.0\ref\Hms.Domain.dll
