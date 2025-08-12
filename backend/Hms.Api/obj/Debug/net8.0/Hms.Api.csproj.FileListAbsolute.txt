@@ -157,3 +157,4 @@ C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Api\bin\Debug\net8.0\tr\Microso
 C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Api\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Api\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Users\mandar\Desktop\projects\HMS\backend\HMS.Api\obj\Debug\net8.0\Hms.Api.sourcelink.json
+C:\Users\mandar\Desktop\projects\HMS\backend\Hms.Api\bin\Debug\net8.0\Hms.Api.staticwebassets.runtime.json

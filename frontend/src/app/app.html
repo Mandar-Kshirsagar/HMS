@@ -45,7 +45,7 @@
   <div class="main-content">
     <!-- Sidebar -->
     <mat-sidenav-container class="sidenav-container">
-      <mat-sidenav #sidenav mode="side" opened class="sidenav" [class.sidenav-closed]="!sidebarOpen">
+      <mat-sidenav #sidenav mode="side" opened class="sidenav" [class.sidenav-closed]="!sidebarOpen()">
         <div class="sidebar-header">
           <mat-icon>dashboard</mat-icon>
           <span>Navigation</span>
@@ -60,13 +60,13 @@
           <a mat-list-item routerLink="/patients" routerLinkActive="active" class="nav-item">
             <mat-icon matListItemIcon>people</mat-icon>
             <span matListItemTitle>Patients</span>
-            <span class="nav-badge" *ngIf="patientCount > 0">{{patientCount}}</span>
+            <span class="nav-badge" *ngIf="patientCount() > 0">{{patientCount()}}</span>
           </a>
           
           <a mat-list-item routerLink="/appointments" routerLinkActive="active" class="nav-item">
             <mat-icon matListItemIcon>event</mat-icon>
             <span matListItemTitle>Appointments</span>
-            <span class="nav-badge urgent" *ngIf="appointmentCount > 0">{{appointmentCount}}</span>
+            <span class="nav-badge urgent" *ngIf="appointmentCount() > 0">{{appointmentCount()}}</span>
           </a>
           
           <a mat-list-item routerLink="/records" routerLinkActive="active" class="nav-item">

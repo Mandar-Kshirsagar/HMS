@@ -762,30 +762,30 @@ export class AppointmentsComponent implements OnInit {
     this.list = [
       {
         id: 1,
-        start: new Date(new Date().setHours(9, 0, 0, 0)),
-        end: new Date(new Date().setHours(9, 30, 0, 0)),
+        start: new Date(new Date().setHours(9, 0, 0, 0)).toISOString(),
+        end: new Date(new Date().setHours(9, 30, 0, 0)).toISOString(),
         status: 'scheduled',
         reason: 'Annual Checkup',
-        patientId: 1,
-        doctorId: 1
+        patientId: '1',
+        doctorUserId: '1'
       },
       {
         id: 2,
-        start: new Date(new Date().setHours(10, 0, 0, 0)),
-        end: new Date(new Date().setHours(10, 45, 0, 0)),
+        start: new Date(new Date().setHours(10, 0, 0, 0)).toISOString(),
+        end: new Date(new Date().setHours(10, 45, 0, 0)).toISOString(),
         status: 'confirmed',
         reason: 'Follow-up Consultation',
-        patientId: 2,
-        doctorId: 2
+        patientId: '2',
+        doctorUserId: '2'
       },
       {
         id: 3,
-        start: new Date(new Date().setHours(14, 0, 0, 0)),
-        end: new Date(new Date().setHours(15, 0, 0, 0)),
+        start: new Date(new Date().setHours(14, 0, 0, 0)).toISOString(),
+        end: new Date(new Date().setHours(15, 0, 0, 0)).toISOString(),
         status: 'scheduled',
         reason: 'Emergency Consultation',
-        patientId: 3,
-        doctorId: 1
+        patientId: '3',
+        doctorUserId: '1'
       }
     ];
     this.applyFilters();
@@ -811,7 +811,7 @@ export class AppointmentsComponent implements OnInit {
     
     if (this.selectedTimeRange) {
       filtered = filtered.filter(a => {
-        const hour = a.start.getHours();
+        const hour = new Date(a.start).getHours();
         switch (this.selectedTimeRange) {
           case 'morning': return hour >= 8 && hour < 12;
           case 'afternoon': return hour >= 12 && hour < 17;
@@ -861,8 +861,8 @@ export class AppointmentsComponent implements OnInit {
     });
   }
   
-  getDuration(start: Date, end: Date): string {
-    const diffMs = end.getTime() - start.getTime();
+  getDuration(start: string, end: string): string {
+    const diffMs = new Date(end).getTime() - new Date(start).getTime();
     const diffMins = Math.round(diffMs / 60000);
     return `${diffMins} min`;
   }
@@ -870,19 +870,19 @@ export class AppointmentsComponent implements OnInit {
   getPatientName(appointment: Appointment): string {
     // Mock patient names - in real app this would come from patient service
     const names = ['John Doe', 'Jane Smith', 'Mike Johnson', 'Sarah Wilson'];
-    return names[appointment.patientId % names.length];
+    return names[parseInt(appointment.patientId) % names.length];
   }
   
   getDoctorName(appointment: Appointment): string {
     // Mock doctor names
     const names = ['Dr. Smith', 'Dr. Johnson', 'Dr. Williams', 'Dr. Brown'];
-    return names[appointment.doctorId % names.length];
+    return names[parseInt(appointment.doctorUserId) % names.length];
   }
   
   getDoctorSpecialty(appointment: Appointment): string {
     // Mock specialties
     const specialties = ['Cardiology', 'Orthopedics', 'Neurology', 'Pediatrics'];
-    return specialties[appointment.doctorId % specialties.length];
+    return specialties[parseInt(appointment.doctorUserId) % specialties.length];
   }
   
   getAppointmentType(appointment: Appointment): string {
@@ -910,18 +910,18 @@ export class AppointmentsComponent implements OnInit {
   
   hasAppointmentAtTime(time: string): boolean {
     const hour = parseInt(time.split(':')[0]);
-    return this.filteredAppointments.some(a => a.start.getHours() === hour);
+    return this.filteredAppointments.some(a => new Date(a.start).getHours() === hour);
   }
   
   isUrgentAtTime(time: string): boolean {
     const hour = parseInt(time.split(':')[0]);
-    const appointment = this.filteredAppointments.find(a => a.start.getHours() === hour);
+    const appointment = this.filteredAppointments.find(a => new Date(a.start).getHours() === hour);
     return appointment ? this.isUrgent(appointment) : false;
   }
   
   getAppointmentAtTime(time: string): any {
     const hour = parseInt(time.split(':')[0]);
-    const appointment = this.filteredAppointments.find(a => a.start.getHours() === hour);
+    const appointment = this.filteredAppointments.find(a => new Date(a.start).getHours() === hour);
     if (appointment) {
       return {
         patientName: this.getPatientName(appointment),

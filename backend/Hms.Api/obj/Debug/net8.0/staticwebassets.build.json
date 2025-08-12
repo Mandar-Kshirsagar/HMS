@@ -1,11 +1,19 @@
 {
   "Version": 1,
-  "Hash": "cfu6uSSvlMXPRcUMKM3692Iv9Gdx8tzO4uMtXk/E0hc=",
+  "Hash": "ZDWLXDAyZhyxjRRGkdRWm7LWdgT0pIHd7+8SN6tpEQQ=",
   "Source": "Hms.Api",
   "BasePath": "_content/Hms.Api",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "Hms.Api\\wwwroot",
+      "Source": "Hms.Api",
+      "ContentRoot": "C:\\Users\\mandar\\Desktop\\projects\\HMS\\backend\\Hms.Api\\wwwroot\\",
+      "BasePath": "_content/Hms.Api",
+      "Pattern": "**"
+    }
+  ],
   "Assets": []
 }

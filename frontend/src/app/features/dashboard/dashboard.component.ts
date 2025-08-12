@@ -83,7 +83,7 @@ import { DashboardService } from '../../core/services/dashboard.service';
               <mat-icon>attach_money</mat-icon>
             </div>
             <div class="stat-details">
-              <div class="stat-number">${{getMonthlyRevenue()}}</div>
+              <div class="stat-number">{{getMonthlyRevenue()}}</div>
               <div class="stat-label">Monthly Revenue</div>
               <div class="stat-change positive">
                 <mat-icon>trending_up</mat-icon>
@@ -565,6 +565,7 @@ export class DashboardComponent implements OnInit {
     ctx.font = '12px Inter';
     ctx.textAlign = 'center';
     data.forEach((d, i) => {
+      const h = (d.visits / max) * 200;
       const x = 30 + i * (barW + gap) + barW / 2;
       ctx.fillText(String(d.month), x, base + 20);
       ctx.fillText(String(d.visits), x, base - h - 10);

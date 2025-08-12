@@ -694,7 +694,7 @@ export class PatientsListComponent implements OnInit {
   getPatientStatus(patient: Patient): string {
     // Mock status logic - in real app this would come from patient data
     const statuses = ['Active', 'Inactive', 'Discharged', 'Urgent'];
-    return statuses[patient.id % statuses.length];
+    return statuses[parseInt(patient.id) % statuses.length];
   }
   
   getPatientStatusClass(patient: Patient): string {
@@ -705,7 +705,7 @@ export class PatientsListComponent implements OnInit {
   getDepartment(patient: Patient): string {
     // Mock department logic
     const departments = ['Cardiology', 'Orthopedics', 'Neurology', 'Pediatrics', 'Emergency'];
-    return departments[patient.id % departments.length];
+    return departments[parseInt(patient.id) % departments.length];
   }
   
   getDepartmentClass(patient: Patient): string {
@@ -715,7 +715,7 @@ export class PatientsListComponent implements OnInit {
   
   getLastVisit(patient: Patient): Date {
     // Mock last visit - in real app this would come from patient data
-    const daysAgo = (patient.id % 30) + 1;
+    const daysAgo = (parseInt(patient.id) % 30) + 1;
     const date = new Date();
     date.setDate(date.getDate() - daysAgo);
     return date;
@@ -724,7 +724,7 @@ export class PatientsListComponent implements OnInit {
   getVisitStatus(patient: Patient): string {
     // Mock visit status
     const statuses = ['Completed', 'Scheduled', 'Cancelled', 'No Show'];
-    return statuses[patient.id % statuses.length];
+    return statuses[parseInt(patient.id) % statuses.length];
   }
   
   calculateAge(dateOfBirth: string): number {

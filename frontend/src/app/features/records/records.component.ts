@@ -315,10 +315,10 @@ import { DocumentsService, DocumentItem } from '../../core/services/documents.se
                         <mat-icon>more_vert</mat-icon>
                       </button>
                       <mat-menu #docMenu="matMenu">
-                        <button mat-menu-item [href]="d.filePath" target="_blank">
+                        <a mat-menu-item [href]="d.filePath" target="_blank">
                           <mat-icon>open_in_new</mat-icon>
                           <span>Open</span>
-                        </button>
+                        </a>
                         <button mat-menu-item (click)="downloadDocument(d)">
                           <mat-icon>download</mat-icon>
                           <span>Download</span>
@@ -1009,7 +1009,7 @@ export class RecordsComponent implements OnInit {
   }
   
   onFile(event: any) {
-    const files = Array.from(event.target.files);
+    const files = Array.from(event.target.files) as File[];
     this.selectedFiles = [...this.selectedFiles, ...files];
   }
   

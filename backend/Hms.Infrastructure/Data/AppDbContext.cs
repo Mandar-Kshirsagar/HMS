@@ -18,19 +18,43 @@ public class AppDbContext : IdentityDbContext<ApplicationUser>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
-        builder.Entity<Patient>().HasIndex(p => p.FullName);
-        builder.Entity<Appointment>()
-               .HasOne<Patient>()
-               .WithMany()
-               .HasForeignKey(a => a.PatientId);
-        builder.Entity<MedicalRecord>()
-               .HasOne<Patient>()
-               .WithMany()
-               .HasForeignKey(r => r.PatientId);
-        builder.Entity<Document>()
-               .HasOne<Patient>()
-               .WithMany()
-               .HasForeignKey(d => d.PatientId);
+        
+        // Patient entity configuration
+        builder.Entity<Patient>(entity =>
+        {
+            entity.HasIndex(p => p.FullName);
+            entity.HasMany(p => p.MedicalRecords)
+                  .WithOne()
+                  .HasForeignKey(r => r.PatientId)
+                  .OnDelete(DeleteBehavior.Cascade);
+            entity.HasMany(p => p.Documents)
+                  .WithOne()
+                  .HasForeignKey(d => d.PatientId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // Appointment entity configuration
+        builder.Entity<Appointment>(entity =>
+        {
+            entity.HasOne<Patient>()
+                  .WithMany()
+                  .HasForeignKey(a => a.PatientId)
+                  .OnDelete(DeleteBehavior.Restrict);
+        });
+
+        // MedicalRecord entity configuration
+        builder.Entity<MedicalRecord>(entity =>
+        {
+            entity.Property(r => r.PatientId)
+                  .IsRequired();
+        });
+
+        // Document entity configuration
+        builder.Entity<Document>(entity =>
+        {
+            entity.Property(d => d.PatientId)
+                  .IsRequired();
+        });
     }
 }
 
